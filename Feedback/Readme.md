@@ -1,119 +1,130 @@
-📋 Simple Feedback API
-This is a basic Spring Boot REST API to submit and view user feedback. It connects to PostgreSQL and supports both single and batch feedback submissions.
+# Simple Feedback API
 
-**✅ Features**
----->Submit single or multiple feedback entries
+Welcome to the **Simple Feedback API**, a clean and easy-to-use Spring Boot REST application for capturing and managing user feedback.
 
----->View all submitted feedback
+---
 
----->Delete all feedback (for dev cleanup)
+## 🌟 Features
 
----->Server-side validation
+- Submit single or multiple feedback entries with validation
+- Retrieve all saved feedback entries
+- Server-side validation ensuring:
+  - Name is required and minimum 3 characters
+  - Email is required and must be valid
+  - Message is required and minimum 10 characters
+- Optional browser-based frontend to view and download feedback JSON
+- Unit tests covering service-layer logic and edge cases
+- PostgreSQL backend with easy cloud deployment readiness
 
----->Optional frontend viewer with download button
+---
 
-🏁 How to Run the Project
-Step 1: Prerequisites
----->Make sure you have:
----->Java 17 or higher
----->Maven installed
+## 🚀 Getting Started
 
-PostgreSQL setup (running locally)
+### Prerequisites
 
-**Step 2:** Set Up the Database
----->Create a PostgreSQL database named feedbackdb
----->Or change the name as per your preference.
+- Java 17 or higher
+- Maven 3.x
+- PostgreSQL (local or cloud-hosted)
+- (Optional) Insomnia, Postman, or curl for API testing
 
----->Update this section in src/main/resources/application.properties:
-text
-spring.datasource.url=jdbc:postgresql://localhost:5432/feedbackdb
-spring.datasource.username=your_postgres_username
-spring.datasource.password=your_password
-spring.jpa.hibernate.ddl-auto=update
+### Configuration
 
-Step 3: Run the Project
----->In the project root folder, open terminal and run this command:
----->bash
----->mvn spring-boot:run
+1. **Set up your PostgreSQL database**
 
-You should see the app running at:
-text
-http://localhost:8080
-📮 Sample API Requests
----->You can use Postman / Insomnia / cURL to test the API.
+   Create a database named `feedbackdb` (or update as needed).
 
-🚀 Submit Single Feedback (POST /feedback)
-Request:
-json
-{
-"name": "Alice",
-"email": "alice@example.com",
-"message": "This is a feedback message."
-}
+2. **Configure database credentials**
 
-cURL:
-bash
-curl -X POST http://localhost:8080/feedback \
--H "Content-Type: application/json" \
--d "{\"name\":\"Alice\",\"email\":\"alice@example.com\",\"message\":\"This is a feedback message.\"}"
+   Edit `src/main/resources/application.properties`:
+   spring.datasource.url=jdbc:postgresql://localhost:5432/feedbackdb
+  spring.datasource.username=your_db_username
+  spring.datasource.password=your_db_password
+  spring.jpa.hibernate.ddl-auto=update
+  spring.jpa.show-sql=true
+  server.port=8080
 
-🚀 Submit Multiple Feedbacks (POST /feedback/batch)
-Request:
-json
-[
-{
-"name": "Sumit",
-"email": "sumit@example.com",
-"message": "First batch message"
-},
-{
-"name": "Bob",
-"email": "bob@example.com",
-"message": "Second batch feedback from Bob"
-}
-]
+### Run the Project
 
-✅ View All Feedback (GET /feedback)
-URL:
-text
-http://localhost:8080/feedback
-cURL:
+Open your terminal at the project root and execute:
 
-bash
+
+Once running, the API will be accessible at [http://localhost:8080](http://localhost:8080).
+
+---
+
+## 📡 API Endpoints
+
+| HTTP Method | Endpoint           | Description                          |
+|-------------|--------------------|------------------------------------|
+| POST        | `/feedback`        | Submit a single feedback entry     |
+| POST        | `/feedback/batch`  | Submit multiple feedback entries   |
+| GET         | `/feedback`        | Retrieve all feedback entries       |
+
+
+---
+
+## 📋 Sample Requests
+
+### Submit Single Feedback
+
+curl -X POST http://localhost:8080/feedback
+-H "Content-Type: application/json"
+-d '{"name":"Alice","email":"alice@example.com","message":"This is a feedback message."}'
+
+
+### Submit Multiple Feedbacks (Batch)
+
+curl -X POST http://localhost:8080/feedback/batch
+-H "Content-Type: application/json"
+-d '[{"name":"Sumit","email":"sumit@example.com","message":"Great app!"},{"name":"Bob","email":"bob@example.com","message":"Loved the service!"}]'
+
+
+### Retrieve All Feedback
+
 curl http://localhost:8080/feedback
-🗑️ Delete All Feedback (DELETE /feedback)
-cURL:
 
-bash
+
+### Delete All Feedback
+
 curl -X DELETE http://localhost:8080/feedback
-🧪 How to Run Tests
-To run all unit tests:
 
-bash
+
+## 🧪 Running Tests
+
+To run unit tests covering all feedback service logic:
+
 mvn test
-🌐 Optional Web Viewer
-To show feedback on an HTML page (and allow JSON download):
 
-Copy feedback.html into:
-src/main/resources/static/
 
-Then open this URL:
+## 🌐 Optional Web Frontend
 
-text
-http://localhost:8080/feedback.html
-This page will:
+You can use the provided `feedback.html` file to view and download feedback in a user-friendly web interface.
 
-Display feedback entries in a table
+- Place `feedback.html` in `src/main/resources/static/`.
+- Access via [http://localhost:8080/feedback.html](http://localhost:8080/feedback.html).
 
-Allow you to download all feedback as a .json file
+---
 
-📌 Notes
-IDs will auto-increment (PostgreSQL SERIAL) and won’t reset automatically, even if you delete rows
+## 🔧 Notes
 
-Server validates:
+- IDs auto-increment and won't reset after deletions (PostgreSQL behavior).
+- Validation errors return HTTP 400 with descriptive messages.
+- The project makes it easy to connect to cloud PostgreSQL services like Aiven.
+- Easily extendable to add authentication, Swagger docs, or React frontend.
 
-Name: at least 3 characters
+---
 
-Email: must be valid
+## 👨‍💻 Contribution
 
-Message: at least 10 characters
+Feel free to fork, raise issues, or submit pull requests!
+
+---
+
+## 📜 License
+
+This project is open source under the MIT License — see the `LICENSE` file for details.
+
+---
+
+Thank you for checking out Simple Feedback API!  
+Happy coding. 🚀
