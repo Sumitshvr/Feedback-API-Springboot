@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Viewer</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        h1 { color: #1976d2; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 2em; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background: #f3f3f3; }
+        button { padding: 0.5em 1.2em; background: #1976d2; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        button:active { background: #145093; }
+    </style>
+</head>
+<body>
+<h1>Feedback List</h1>
+<button id="downloadBtn">Download JSON</button>
+<br><br>
+<table id="feedbackTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Message</th>
+        <th>Created At</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    let feedbackData = [];
+
+    // Fetch data from the API
+    function loadFeedback() {
+        fetch('http://localhost:8080/feedback')
+            .then(response => response.json())
+            .then(data => {
+                feedbackData = data;
+                renderTable(data);
+            })
+            .catch(err => {
+                alert('Error loading data! Is your backend running?');
+            });
+    }
+
+    // Render feedback in table
+    function renderTable(data) {
+        const tbody = document.querySelector("#feedbackTable tbody");
+        tbody.innerHTML = ""; // clear if any
+
+        data.forEach(entry => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${entry.id}</td>
+                <td>${entry.name}</td>
+                <td>${entry.email}</td>
+                <td>${entry.message}</td>
+                <td>${entry.createdAt ? entry.createdAt.replace('T',' ').split('.')[0] : ''}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Download JSON functionality
+    document.getElementById("downloadBtn").onclick = function () {
+        const jsonStr = JSON.stringify(feedbackData, null, 2);
+        const blob = new Blob([jsonStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        // Create a temporary link and trigger the download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "feedback-data.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
+    // Load feedbacks when page loads
+    window.onload = loadFeedback;
+</script>
+</body>
+</html>
