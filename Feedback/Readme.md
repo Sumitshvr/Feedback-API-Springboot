@@ -59,6 +59,7 @@ Once running, the API will be accessible at [http://localhost:8080](http://local
 | POST        | `/feedback`        | Submit a single feedback entry     |
 | POST        | `/feedback/batch`  | Submit multiple feedback entries   |
 | GET         | `/feedback`        | Retrieve all feedback entries       |
+| DELETE      | '/feedback'        | Deletes all the feedbacks for testing |
 
 
 ---
