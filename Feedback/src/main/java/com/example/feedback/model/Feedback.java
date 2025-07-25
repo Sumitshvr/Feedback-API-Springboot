@@ -25,9 +25,8 @@ public class Feedback {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Feedback() {} // Required by Spring & JPA
+    public Feedback() {} 
 
-    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
